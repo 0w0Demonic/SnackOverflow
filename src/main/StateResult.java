@@ -32,18 +32,40 @@ public sealed interface StateResult
     public static record Exit()                 implements StateResult {}
     public static record Fail(String message)   implements StateResult {}
 
+    /**
+     * Move to next state.
+     * 
+     * @param next the state to be moved into
+     * @return
+     */
     public static Transition transition(State next) {
         return new Transition(next);
     }
     
+    /**
+     * Stay in the current state.
+     * 
+     * @return
+     */
     public static Stay stay() {
         return new Stay();
     }
 
+    /**
+     * Exit the application.
+     * 
+     * @return
+     */
     public static Exit exit() {
         return new Exit();
     }
     
+    /**
+     * Stay in the current state, displaying an error message.
+     * 
+     * @param message
+     * @return
+     */
     public static Fail fail(String message) {
         return new Fail(message);
     }

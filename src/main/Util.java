@@ -1,5 +1,8 @@
 package main;
 
+/**
+ * Common utils.
+ */
 public final class Util
 {
     public static boolean isNumber(String str) {

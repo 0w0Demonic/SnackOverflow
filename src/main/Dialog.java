@@ -10,7 +10,7 @@ import main.StateResult.Stay;
 import main.StateResult.Transition;
 import sql.DbConnection;
 
-/** Simple REPL loop via stdin and stdout. */
+/** Simple UI stdin and stdout. */
 public final class Dialog implements AutoCloseable
 {
     /** Internal Scanner used to retrieve user input from the stdin. */
@@ -31,7 +31,7 @@ public final class Dialog implements AutoCloseable
     }
 
     /**
-     * Opens the REPL loop, beginning at a "welcome screen" determined
+     * Opens the input loop, beginning at a "welcome screen" determined
      * by the database connection.
      * 
      * @param con the database to be connected to
@@ -52,11 +52,11 @@ public final class Dialog implements AutoCloseable
                 case Stay()                  -> currentState;
 
                 case Fail(String message) -> {
-                    System.out.println(message);
+                    System.err.println(message);
                     yield currentState;
                 }
                 case Exit() -> {
-                    this.close();
+                    close();
                     System.exit(1);
                     yield null;
                 }
@@ -64,6 +64,9 @@ public final class Dialog implements AutoCloseable
         }
     }
 
+    /**
+     * Closes the dialog and underlying scanner.
+     */
     @Override
     public void close() {
         System.out.println("[   ] Closing...");

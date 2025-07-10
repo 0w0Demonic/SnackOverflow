@@ -11,6 +11,9 @@ import dto.Inventory;
 import dto.Machine;
 import sql.DbConnection;
 
+/**
+ * Vending machine items screen.
+ */
 public class VendingMachine implements State
 {
     private final Machine m;
@@ -22,6 +25,10 @@ public class VendingMachine implements State
     }
 
     private boolean firstTime = true;
+    
+    /**
+     * Lazily loaded list of all inventory.
+     */
     private List<Inventory> inventory;
 
     @Override

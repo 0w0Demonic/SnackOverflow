@@ -50,6 +50,9 @@ public final class DbConnection implements AutoCloseable
     
     //////////////////////////////////////////////////////////////
     
+    /**
+     * Converts an ResultSet entry into dto.Machine.
+     */
     private static final Mapper<Machine> MACHINE = rs -> {
         return new Machine(
                 rs.getInt("id"),
@@ -66,6 +69,11 @@ public final class DbConnection implements AutoCloseable
     
     //////////////////////////////////////////////////////////////
     
+    /**
+     * Queries all available vending machines.
+     * 
+     * @return a list
+     */
     public List<Machine> allMachines() {
         return query("""
         SELECT *
@@ -77,6 +85,12 @@ public final class DbConnection implements AutoCloseable
         """).toList(MACHINE);
     }
     
+    /**
+     * Returns an optional of the given machine queried by id.
+     * 
+     * @param id the id to be used
+     * @return an optional
+     */
     public Optional<Machine> machineById(int id) {
         var list = query("""
         SELECT *
@@ -94,13 +108,21 @@ public final class DbConnection implements AutoCloseable
         return Optional.of(list.get(0));
     }
     
+    /**
+     * Queries all inventory of the given vending machine.
+     * 
+     * @param machineId the id to query
+     * @return a list
+     */
     public List<Inventory> inventory(int machineId) {
         return query("""
         SELECT *
         FROM Inventory Inv
         INNER JOIN Item
                 ON Inv.itemId = Item.id
+        WHERE machineId = ?
         """)
+        .withArgs(machineId)
         .toList(rs -> {
             return new Inventory(
                     rs.getInt("id"),
@@ -111,7 +133,12 @@ public final class DbConnection implements AutoCloseable
                     rs.getInt("slot"));
         });
     }
-    
+
+    /**
+     * Switches on the given vending machine
+     * 
+     * @param machineId id of the vending machine
+     */
     public void switchOn(int machineId) {
         query("""
             UPDATE Machine
@@ -122,6 +149,11 @@ public final class DbConnection implements AutoCloseable
         .update();
     }
     
+    /**
+     * Switches off the given vending machine
+     * 
+     * @param machineId id of the vending machine
+     */
     public void switchOff(int machineId) {
         query("""
             UPDATE Machine
@@ -132,6 +164,12 @@ public final class DbConnection implements AutoCloseable
         .update();
     }
     
+    /**
+     * Buys from the given inventory.
+     * 
+     * @param machineId
+     * @param itemId
+     */
     public void buy(int machineId, int itemId) {
         query("""
         UPDATE Inventory

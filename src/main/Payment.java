@@ -8,6 +8,9 @@ import dto.Inventory;
 import dto.Machine;
 import sql.DbConnection;
 
+/**
+ * Payment screen.
+ */
 public final class Payment implements State
 {
     private final Inventory inv;

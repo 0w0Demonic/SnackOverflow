@@ -1,5 +1,8 @@
 package dto;
 
+/**
+ * Represents a vending machine.
+ */
 public record Machine(
         int id,
         int modelId,
